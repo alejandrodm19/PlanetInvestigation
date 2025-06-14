@@ -1,15 +1,21 @@
 const container = document.getElementById("missions-list");
 
-async function fetchUpcomingMissions() {
-  const url = "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=8";
-
+async function fetchMissions() {
   try {
-    const response = await fetch(url);
+    const response = await fetch(
+      "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=8"
+    );
+
+    if (!response.ok) throw new Error(`Status: ${response.status}`);
+
     const data = await response.json();
-    return data.results;
+    displayMissions(data.results);
   } catch (error) {
-    console.error("Error fetching upcoming missions:", error);
-    return [];
+    console.warn("Live API failed. Using mock data instead:", error);
+    // fallback
+    const mock = await fetch("src/data/mock-missions.json");
+    const data = await mock.json();
+    displayMissions(data.results);
   }
 }
 

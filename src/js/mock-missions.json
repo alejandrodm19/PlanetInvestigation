@@ -1,0 +1,20 @@
+{
+  "results": [
+    {
+      "name": "Artemis I",
+      "net": "2025-09-01T00:00:00Z",
+      "mission": {
+        "description": "First uncrewed test flight of the SLS rocket and Orion spacecraft."
+      },
+      "pad": { "location": { "name": "Kennedy Space Center" } }
+    },
+    {
+      "name": "Mars Sample Return",
+      "net": "2026-06-15T00:00:00Z",
+      "mission": {
+        "description": "Planned NASA/ESA mission to return samples from Mars."
+      },
+      "pad": { "location": { "name": "Cape Canaveral" } }
+    }
+  ]
+}
