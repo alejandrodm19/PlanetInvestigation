@@ -13,7 +13,7 @@ async function fetchMissions() {
   } catch (error) {
     console.warn("Live API failed. Using mock data instead:", error);
     // fallback
-    const mock = await fetch("src/data/mock-missions.json");
+    const mock = await fetch("src/js/mock-missions.json");
     const data = await mock.json();
     displayMissions(data.results);
   }
