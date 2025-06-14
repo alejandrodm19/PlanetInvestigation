@@ -1,24 +1,5 @@
 const container = document.getElementById("missions-list");
 
-async function fetchMissions() {
-  try {
-    const response = await fetch(
-      "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=8"
-    );
-
-    if (!response.ok) throw new Error(`Status: ${response.status}`);
-
-    const data = await response.json();
-    displayMissions(data.results);
-  } catch (error) {
-    console.warn("Live API failed. Using mock data instead:", error);
-    // fallback
-    const mock = await fetch("src/js/mock-missions.json");
-    const data = await mock.json();
-    displayMissions(data.results);
-  }
-}
-
 function createMissionCard(mission) {
   const card = document.createElement("div");
   card.classList.add("card");
@@ -28,7 +9,7 @@ function createMissionCard(mission) {
   const date = new Date(mission.net).toLocaleString();
   const agency = mission.launch_service_provider?.name || "Unknown Agency";
   const videoURL = mission.vidURLs?.[0] || null;
-  const image = mission.image || "/src/images/placeholder-launch.jpg";
+  const image = mission.image || "./images/placeholder-launch.jpg";
 
   card.innerHTML = `
     <h3>${missionName}</h3>
@@ -46,9 +27,27 @@ function createMissionCard(mission) {
   container.appendChild(card);
 }
 
-async function displayMissions() {
-  const missions = await fetchUpcomingMissions();
-  missions.forEach(createMissionCard);
+async function fetchAndDisplayMissions() {
+  try {
+    const response = await fetch(
+      "https://ll.thespacedevs.com/2.2.0/launch/upcoming/?limit=8"
+    );
+
+    if (!response.ok) throw new Error(`Status: ${response.status}`);
+
+    const data = await response.json();
+    data.results.forEach(createMissionCard);
+  } catch (error) {
+    console.warn("Live API failed. Using mock data instead:", error);
+    try {
+      const mock = await fetch("./mock-missions.json");
+      const data = await mock.json();
+      data.results.forEach(createMissionCard);
+    } catch (mockError) {
+      console.error("Failed to load mock data:", mockError);
+      container.innerHTML = `<p style="color: red;">Unable to load mission data.</p>`;
+    }
+  }
 }
 
-displayMissions();
+fetchAndDisplayMissions();
